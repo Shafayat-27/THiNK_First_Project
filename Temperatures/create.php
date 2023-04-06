@@ -22,9 +22,6 @@ if($requestMethod == 'POST'){
         $storeTemperature = storeTemperature($inputData);
     
      }
-
-     
-     
     echo $storeTemperature;
     }
     

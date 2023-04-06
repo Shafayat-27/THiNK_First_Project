@@ -23,24 +23,46 @@ function storeTemperature($temperatureInput){
     }elseif(empty(trim($temp_))){
         return error422('Enter Temperature ');
     }else{
-        $query = "INSERT INTO temp_log (Tempno_, Temp_) VALUES ('$tempno_','$temp_')";
-        $result = mysqli_query($conn, $query);
+        if($temp_ < 40){
+            $query = "INSERT INTO temp_log (Tempno_, Temp_) VALUES ('$tempno_','$temp_')";
+            $result = mysqli_query($conn, $query);
 
-        if($result){
-            $data = [
-                'status' => 201,
-                'message' => 'Temperature Created Successfully',
-            ];
-            header("HTTP/1.0 201 Created");
-            return json_encode($data);
+            if($result){
+                $data = [
+                    'status' => 201,
+                    'message' => 'Temperature Created Successfully',
+                ];
+                header("HTTP/1.0 201 Created");
+                return json_encode($data);
+            }else{
+                $data = [
+                    'status' => 500,
+                    'message' => 'Internal Server Error',
+                ];
+                header("HTTP/1.0 500 Internal Server Error");
+                return json_encode($data);
+            }
         }else{
-            $data = [
-                'status' => 500,
-                'message' => 'Internal Server Error',
-            ];
-            header("HTTP/1.0 500 Internal Server Error");
-            return json_encode($data);
+            $query = "INSERT INTO alarm_log (Alarmno_, Alarm_) VALUES ('$tempno_','$temp_')";
+            $result = mysqli_query($conn, $query);
+
+            if($result){
+                $data = [
+                    'status' => 201,
+                    'message' => 'Temperature Created Successfully',
+                ];
+                header("HTTP/1.0 201 Created");
+                return json_encode($data);
+            }else{
+                $data = [
+                    'status' => 500,
+                    'message' => 'Internal Server Error',
+                ];
+                header("HTTP/1.0 500 Internal Server Error");
+                return json_encode($data);
+            }
         }
+        
     }
 }
 
